@@ -1,0 +1,356 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ————— Charte OKLCh : fonds & structure (clair) ————— */
+    --color-bg: oklch(0.978 0.004 228);             /* #F5F7FA */
+    --color-surface: oklch(1 0 0);                  /* #FFFFFF */
+    --color-surface-2: oklch(0.985 0.004 228);
+    --color-fg: oklch(0.3 0.03 250);                /* #1A2A3C */
+    --color-muted: oklch(0.55 0.03 250);            /* #5C6F83 */
+    --color-border: oklch(0.91 0.01 244);           /* #E2E8F0 */
+    --color-accent: oklch(0.605 0.145 207);         /* #00A3C4 */
+    --color-accent-strong: oklch(0.5 0.13 205);     /* #008A9E */
+    --color-primary-foreground: oklch(1 0 0);       /* texte sur accent */
+    --color-navy: oklch(0.26 0.055 249);            /* #0F2B4A */
+    --color-navy-2: oklch(0.225 0.05 252);
+    --color-navy-deep: oklch(0.2 0.045 256);        /* #0B2240 */
+    --color-on-navy: oklch(0.93 0.015 240);
+    --color-on-navy-muted: oklch(0.72 0.03 240);
+
+    /* ————— Sémantiques (identiques clair/sombre) ————— */
+    --st-att: oklch(0.79 0.16 82);                  /* en_attente / alerte */
+    --st-run: var(--color-accent);                  /* en_cours / action */
+    --st-ok: oklch(0.72 0.13 160);                  /* résolu */
+    --st-no: oklch(0.62 0.2 25);                    /* rejeté / urgent */
+    --d-eau: oklch(0.62 0.16 258);                  /* #4C83E8 */
+    --d-ass: oklch(0.62 0.11 200);                  /* #0F9B8E */
+    --d-dec: oklch(0.58 0.18 52);                   /* #C2590C */
+    --d-ecl: oklch(0.55 0.22 300);                  /* #7C5CD1 */
+    --prio-h: oklch(0.6 0.2 27);                    /* #EF4444 */
+    --prio-m: var(--st-att);                        /* #F59E0B */
+    --prio-l: oklch(0.55 0.03 250);
+
+    /* ————— Mapping des tokens shadcn sur la charte (composants OKLCh bruts) ————— */
+    --background: 0.978 0.004 228;
+    --foreground: 0.3 0.03 250;
+    --card: 1 0 0;
+    --card-foreground: 0.3 0.03 250;
+    --popover: 1 0 0;
+    --popover-foreground: 0.3 0.03 250;
+    --primary: 0.605 0.145 207;
+    --primary-foreground: 1 0 0;
+    --secondary: 0.985 0.004 228;
+    --secondary-foreground: 0.3 0.03 250;
+    --muted: 0.985 0.004 228;
+    --muted-foreground: 0.55 0.03 250;
+    --accent: 0.985 0.004 228;
+    --accent-foreground: 0.3 0.03 250;
+    --destructive: 0.62 0.2 25;
+    --destructive-foreground: 1 0 0;
+    --border: 0.91 0.01 244;
+    --input: 0.91 0.01 244;
+    --ring: 0.605 0.145 207;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* ————— Charte OKLCh : fonds & structure (soft dark, adouci) ————— */
+    --color-bg: oklch(0.18 0.02 250);               /* #1C2533 */
+    --color-surface: oklch(0.22 0.025 248);         /* #232E3F */
+    --color-surface-2: oklch(0.26 0.025 248);       /* #2A374B */
+    --color-fg: oklch(0.92 0.015 240);              /* #ECF2F9 */
+    --color-muted: oklch(0.68 0.03 240);            /* #9EB4CA */
+    --color-border: oklch(0.31 0.025 250);          /* #2F4058 */
+    --color-accent: oklch(0.72 0.16 208);           /* #38C9E6 */
+    --color-accent-soft: oklch(0.72 0.16 208 / 0.14);
+    --color-accent-strong: oklch(0.78 0.15 208);
+    --color-primary-foreground: oklch(0.13 0.03 250);
+    --color-navy: oklch(0.23 0.04 258);             /* #13233C */
+    --color-navy-2: oklch(0.26 0.045 258);
+    --color-navy-deep: oklch(0.21 0.035 260);
+    --color-on-navy: oklch(0.93 0.015 240);
+    --color-on-navy-muted: oklch(0.68 0.03 240);
+
+    --st-att: oklch(0.79 0.16 82);
+    --st-run: var(--color-accent);
+    --st-ok: oklch(0.72 0.13 160);
+    --st-no: oklch(0.62 0.2 25);
+    --d-eau: oklch(0.62 0.16 258);
+    --d-ass: oklch(0.62 0.11 200);
+    --d-dec: oklch(0.58 0.18 52);
+    --d-ecl: oklch(0.55 0.22 300);
+    --prio-h: oklch(0.6 0.2 27);
+    --prio-m: var(--st-att);
+    --prio-l: oklch(0.55 0.03 250);
+
+    --background: 0.18 0.02 250;
+    --foreground: 0.92 0.015 240;
+    --card: 0.22 0.025 248;
+    --card-foreground: 0.92 0.015 240;
+    --popover: 0.22 0.025 248;
+    --popover-foreground: 0.92 0.015 240;
+    --primary: 0.72 0.16 208;
+    --primary-foreground: 0.13 0.03 250;
+    --secondary: 0.26 0.025 248;
+    --secondary-foreground: 0.92 0.015 240;
+    --muted: 0.26 0.025 248;
+    --muted-foreground: 0.68 0.03 240;
+    --accent: 0.26 0.025 248;
+    --accent-foreground: 0.92 0.015 240;
+    --destructive: 0.62 0.2 25;
+    --destructive-foreground: 1 0 0;
+    --border: 0.31 0.025 250;
+    --input: 0.31 0.025 250;
+    --ring: 0.72 0.16 208;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    font-family: 'Inter', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Police du wordmark « Madinaty » (Excalifont) */
+  .font-brand {
+    font-family: var(--font-brand), 'Inter', ui-sans-serif, system-ui;
+  }
+
+  /* Lisibilité du texte en arabe : hauteur de police globalement plus grande
+     (les tailles relatives `rem` en sont toutes dérivées). */
+  html[lang="ar"] {
+    font-size: 1.05rem;
+  }
+
+  /* Forcer le z-index des popups shadcn au-dessus de la carte Leaflet */
+  [data-radix-popper-content-wrapper] {
+    z-index: 9999 !important;
+  }
+
+  /* Alternative pour les Select */
+  [data-slot="select-content"] {
+    z-index: 9999 !important;
+  }
+
+  /* Support RTL pour l'arabe */
+  [dir="rtl"] .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+  }
+
+  /* Animation du bandeau Conseils + Annonces : entrée en glissement */
+  @keyframes banner-in {
+    from {
+      opacity: 0;
+      transform: translateX(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Barre de progression de l'auto-rotation du bandeau */
+  @keyframes banner-progress {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
+}
+
+/* ===== Badges sémantiques (statuts / priorités / domaines) ===== */
+/* Modèle clair : fond teinté + texte sombre ; sombre : texte clair. */
+@layer components {
+  .badge-s {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    padding: 2px 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .badge-s .rtag {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* Statuts */
+  .bc-st-att { background: rgba(245, 158, 11, 0.12); color: oklch(0.46 0.14 70); border-color: rgba(245, 158, 11, 0.3); }
+  .bc-st-run { background: rgba(0, 163, 196, 0.1); color: oklch(0.4 0.1 207); border-color: rgba(0, 163, 196, 0.3); }
+  .bc-st-ok  { background: rgba(16, 185, 129, 0.12); color: oklch(0.42 0.13 160); border-color: rgba(16, 185, 129, 0.3); }
+  .bc-st-no  { background: rgba(100, 116, 139, 0.12); color: oklch(0.45 0.02 250); border-color: rgba(100, 116, 139, 0.3); }
+
+  .dark .bc-st-att { color: oklch(0.8 0.14 70); }
+  .dark .bc-st-run { color: oklch(0.8 0.12 207); }
+  .dark .bc-st-ok  { color: oklch(0.78 0.13 160); }
+  .dark .bc-st-no  { color: oklch(0.7 0.02 250); }
+
+  /* Priorités */
+  .bc-pr-h { background: rgba(239, 68, 68, 0.12); color: oklch(0.46 0.18 27); border-color: rgba(239, 68, 68, 0.3); }
+  .bc-pr-m { background: rgba(245, 158, 11, 0.12); color: oklch(0.46 0.14 70); border-color: rgba(245, 158, 11, 0.3); }
+  .bc-pr-l { background: rgba(100, 116, 139, 0.1); color: oklch(0.45 0.02 250); border-color: rgba(100, 116, 139, 0.25); }
+
+  .dark .bc-pr-h { color: oklch(0.72 0.18 27); }
+  .dark .bc-pr-m { color: oklch(0.8 0.14 70); }
+  .dark .bc-pr-l { color: oklch(0.7 0.02 250); }
+
+  /* Domaines */
+  .bc-dm-eau { background: rgba(76, 131, 232, 0.12); color: oklch(0.44 0.14 250); border-color: rgba(76, 131, 232, 0.3); }
+  .bc-dm-ass { background: rgba(15, 155, 142, 0.12); color: oklch(0.44 0.1 190); border-color: rgba(15, 155, 142, 0.3); }
+  .bc-dm-dec { background: rgba(194, 89, 12, 0.12); color: oklch(0.46 0.16 52); border-color: rgba(194, 89, 12, 0.3); }
+  .bc-dm-ecl { background: rgba(124, 92, 209, 0.12); color: oklch(0.46 0.2 300); border-color: rgba(124, 92, 209, 0.3); }
+
+  .dark .bc-dm-eau { color: oklch(0.8 0.12 238); }
+  .dark .bc-dm-ass { color: oklch(0.78 0.1 190); }
+  .dark .bc-dm-dec { color: oklch(0.8 0.12 60); }
+  .dark .bc-dm-ecl { color: oklch(0.82 0.14 290); }
+
+  /* Annonces */
+  .bc-ann-urgent { background: rgba(239, 68, 68, 0.1); color: oklch(0.42 0.16 27); border-color: rgba(239, 68, 68, 0.35); }
+  .bc-ann-warning { background: rgba(245, 158, 11, 0.1); color: oklch(0.46 0.15 70); border-color: rgba(245, 158, 11, 0.35); }
+  .bc-ann-info { background: rgba(0, 163, 196, 0.08); color: oklch(0.4 0.1 207); border-color: rgba(0, 163, 196, 0.3); }
+  .bc-ann-tip { background: rgba(16, 185, 129, 0.08); color: oklch(0.4 0.11 160); border-color: rgba(16, 185, 129, 0.3); }
+
+  .dark .bc-ann-urgent { color: oklch(0.72 0.14 27); }
+  .dark .bc-ann-warning { color: oklch(0.8 0.14 70); }
+  .dark .bc-ann-info { color: oklch(0.8 0.12 207); }
+  .dark .bc-ann-tip { color: oklch(0.78 0.12 160); }
+}
+
+/* ===== Sidebar lettres verticales (design « Madinaty ») ===== */
+.sb-letter {
+  font-family: var(--font-brand), 'Inter', ui-sans-serif, system-ui;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+}
+
+/* ===== Polices de display (valeurs KPI) ===== */
+.font-display {
+  font-family: var(--font-display, 'Inter'), 'Inter', ui-sans-serif, system-ui;
+}
+
+/* ===== Barres de progression des KPIs (tokens OKLCh, charte) ===== */
+@layer components {
+  .kpi-bar-total { background: var(--color-accent); }
+  .kpi-bar-att { background: var(--st-att); }
+  .kpi-bar-run { background: var(--d-eau); }
+  .kpi-bar-ok { background: var(--st-ok); }
+  .kpi-bar-sla { background: var(--st-no); }
+  .kpi-bar-no { background: var(--prio-l); }
+}
+
+/* ===== Marquee des annonces (bandeau défilant) ===== */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Sens inverse en RTL (arabe) pour conserver un défilement naturel. */
+[dir="rtl"] .marquee-track {
+  animation-direction: reverse;
+}
+
+/* ===== Marqueurs en épingle teardrop (SVG OpenDesign, couleur par domaine) ===== */
+.marker-pin {
+  display: block;
+  position: relative;
+  width: 30px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  line-height: 1;
+  cursor: pointer;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+  transition: transform 150ms ease;
+}
+.marker-pin:hover {
+  transform: translateY(-2px);
+}
+.marker-pin:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 999px;
+}
+
+/* Grande épingle du marqueur sélectionné (popup ouverte) */
+.marker-pin--lg {
+  width: 40px;
+  height: 46px;
+}
+.marker-pin--lg:hover {
+  transform: translateY(-4px);
+}
+.marker-pin svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Empilement de l'épingle et de l'anneau pulsant */
+.marker-pin-stack {
+  position: absolute;
+  inset: 0;
+}
+
+/* Anneau pulsant accent du marqueur sélectionné */
+@keyframes ring-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.7);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.6);
+    opacity: 0;
+  }
+}
+.pulse-ring {
+  position: absolute;
+  left: 50%;
+  top: 35%;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--color-accent);
+  border-radius: 9999px;
+  pointer-events: none;
+  animation: ring-pulse 1.4s ease-out infinite;
+}
+
+/* ===== Tooltip de la légende cartographique (animation douce) ===== */
+@keyframes map-tooltip-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.map-tooltip {
+  animation: map-tooltip-in 150ms ease-out;
+  transform-origin: bottom center;
+}
