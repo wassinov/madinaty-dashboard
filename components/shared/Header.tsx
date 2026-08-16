@@ -1,24 +1,16 @@
 'use client'
 
-import { useEffect, useSyncExternalStore, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { useTheme } from '@teispace/next-themes'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher'
+import { ThemeToggle } from '@/components/shared/ThemeToggle'
 import { BrandLogo } from '@/components/shared/BrandLogo'
 import { wilayas } from '../../src/data/wilayas'
 import { getCommuneByCode } from '@/lib/utils/geoHelpers'
-import {
-  Moon,
-  Sun,
-  Menu,
-  ChevronsLeft,
-  ChevronsRight,
-  MapPin,
-  Bell,
-} from 'lucide-react'
+import { Menu, ChevronsLeft, ChevronsRight, MapPin, Bell } from 'lucide-react'
 
 type Profile = {
   email: string
@@ -41,14 +33,8 @@ export function Header({
   const locale = useLocale()
   const pathname = usePathname()
   const t = useTranslations('header')
-  const { resolvedTheme, setTheme } = useTheme()
   const supabase = createClient()
   const [profile, setProfile] = useState<Profile | null>(null)
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  )
 
   useEffect(() => {
     let active = true
@@ -166,20 +152,7 @@ export function Header({
         </Button>
 
         {/* Theme toggle */}
-        <Button
-          variant="ghost"
-          size="icon"
-          data-od-id="theme-toggle"
-          aria-label={t('toggle_theme')}
-          onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-          className="shrink-0"
-        >
-          {mounted && resolvedTheme === 'dark' ? (
-            <Sun className="h-4 w-4" />
-          ) : (
-            <Moon className="h-4 w-4" />
-          )}
-        </Button>
+        <ThemeToggle />
 
         {/* Language switcher (icône globe) */}
         <LanguageSwitcher />

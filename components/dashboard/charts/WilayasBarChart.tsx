@@ -15,6 +15,19 @@ import { wilayas } from '@/src/data/wilayas'
 
 type Datum = { label: string; count: number }
 
+// Palette de couleurs distinctes (tokens OKLCh de la charte, valides
+// clair/sombre). Une couleur par wilaya, cyclée si plus de wilayas.
+const BAR_COLORS = [
+  'var(--d-eau)',
+  'var(--d-ass)',
+  'var(--d-dec)',
+  'var(--d-ecl)',
+  'var(--st-ok)',
+  'var(--st-att)',
+  'var(--st-no)',
+  'var(--color-accent)',
+]
+
 const wilayaName = (code: string, locale: string) => {
   if (!/^\d{2}$/.test(code)) return code
   const w = wilayas.find((x) => x.code === code)
@@ -58,7 +71,7 @@ export function WilayasBarChart({ data }: { data: Datum[] }) {
         <Tooltip formatter={(v: number) => [v, t('bar_tooltip_count')]} />
         <Bar dataKey="count" radius={[0, 4, 4, 0]}>
           {ordered.map((_, i) => (
-            <Cell key={i} fill="var(--color-accent)" />
+            <Cell key={i} fill={BAR_COLORS[i % BAR_COLORS.length]} />
           ))}
         </Bar>
       </BarChart>

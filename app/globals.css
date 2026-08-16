@@ -354,3 +354,14 @@
   animation: map-tooltip-in 150ms ease-out;
   transform-origin: bottom center;
 }
+
+/* ===== Recharts Pie : retire le rectangle de focus navigateur
+   qui entoure la tranche cliquée (sector rendu focusable par recharts). ===== */
+.recharts-pie-sector:focus,
+.recharts-pie-sector:focus-visible,
+.recharts-sector:focus,
+.recharts-sector:focus-visible,
+.recharts-layer:focus,
+.recharts-layer:focus-visible {
+  outline: none;
+}

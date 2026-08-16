@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import type { Signalement } from '@/types/database'
-import { TYPE_META, STATUT_BADGE, PRIORITY_BADGE } from '@/lib/constants'
+import { MARKER_BG_HEX, STATUT_BADGE, PRIORITY_BADGE } from '@/lib/constants'
+import { TYPE_GLYPH, TypeGlyph } from '@/components/shared/TypeGlyph'
 import { formatDate } from '@/lib/utils/formatting'
 import { ReportDetailModal } from '@/components/dashboard/ReportDetailModal'
 
@@ -65,8 +66,15 @@ export function SignalementTable({
                     className="cursor-pointer border-b border-[var(--color-border)] transition-colors hover:bg-[var(--color-surface-2)]"
                   >
                     <td className="whitespace-nowrap px-4 py-2.5">
-                      <span className="mr-1" aria-hidden>
-                        {TYPE_META[s.type]?.emoji ?? '📍'}
+                      <span
+                        className="mr-1 inline-flex align-middle"
+                        aria-hidden
+                        style={{ color: MARKER_BG_HEX[s.type] ?? '#6b7280' }}
+                      >
+                        <TypeGlyph
+                          id={TYPE_GLYPH[s.type] ?? 'droplet'}
+                          className="h-4 w-4"
+                        />
                       </span>
                       {tTypes(s.type)}
                     </td>
