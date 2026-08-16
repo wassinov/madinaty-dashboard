@@ -65,10 +65,10 @@ export async function StatsCards({
             </CardTitle>
           </CardHeader>
           <CardContent className="py-0">
-            <div className="font-display text-lg font-extrabold leading-none tracking-[-0.02em] text-[var(--color-fg)] md:text-xl">
+            <div className="font-display text-base font-bold leading-none tracking-[-0.02em] text-[var(--color-fg)] md:text-lg">
               {item.value}
             </div>
-            <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-[var(--color-surface-2)]">
+            <div className="mt-1 h-0.5 w-full overflow-hidden rounded-full bg-[var(--color-surface-2)]">
               {item.bar && (
                 <div
                   className={`h-full rounded-full ${item.bar}`}

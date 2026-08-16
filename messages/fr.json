@@ -1,4 +1,7 @@
 {
+  "brand": {
+    "slogan": "Signalez, nous agissons"
+  },
   "common": {
     "loading": "Chargement...",
     "loading_stats": "Chargement des stats...",
@@ -79,7 +82,7 @@
     "role_citoyen": "Citoyen",
     "menu": "Ouvrir le menu",
     "toggle_theme": "Basculer le thème",
-    "dashboard_title": "Tableau de bord",
+    "welcome": "Bienvenue",
     "my_reports": "Mes signalements",
     "collapse": "Réduire la sidebar",
     "expand": "Déployer la sidebar",
@@ -87,7 +90,6 @@
   },
   "filters": {
     "statut": "Statut",
-    "type": "Type",
     "wilaya": "Wilaya",
     "commune": "Commune",
     "secteur": "Secteur",
@@ -95,14 +97,11 @@
     "to_date": "Au",
     "search_placeholder": "Rechercher...",
     "all_statuses": "Tous",
-    "all_types": "Tous",
     "all_wilayas": "Toutes",
     "all_communes": "Toutes",
     "panel_title": "Filtres",
     "open_panel": "Filtres",
-    "reset": "Réinitialiser",
-    "show_list": "Liste",
-    "hide_list": "Fermer la liste"
+    "reset": "Réinitialiser"
   },
   "modal": {
     "title": "Détails du signalement",

@@ -1,4 +1,7 @@
 {
+  "brand": {
+    "slogan": "بلّغ، نتحرك"
+  },
   "common": {
     "loading": "جارٍ التحميل...",
     "loading_stats": "جارٍ تحميل الإحصائيات...",
@@ -79,7 +82,7 @@
     "role_citoyen": "مواطن",
     "menu": "فتح القائمة",
     "toggle_theme": "تبديل السمة",
-    "dashboard_title": "لوحة القيادة",
+    "welcome": "مرحبا",
     "my_reports": "بلاغاتي",
     "collapse": "طي الشريط الجانبي",
     "expand": "توسيع الشريط الجانبي",
@@ -87,7 +90,6 @@
   },
   "filters": {
     "statut": "الحالة",
-    "type": "النوع",
     "wilaya": "الولاية",
     "commune": "البلدية",
     "secteur": "القطاع",
@@ -95,14 +97,11 @@
     "to_date": "إلى",
     "search_placeholder": "بحث...",
     "all_statuses": "الكل",
-    "all_types": "الكل",
     "all_wilayas": "الكل",
     "all_communes": "الكل",
     "panel_title": "تصفية",
     "open_panel": "تصفية",
-    "reset": "إعادة تعيين",
-    "show_list": "القائمة",
-    "hide_list": "إغلاق القائمة"
+    "reset": "إعادة تعيين"
   },
   "modal": {
     "title": "تفاصيل البلاغ",

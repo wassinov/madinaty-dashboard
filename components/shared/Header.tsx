@@ -1,21 +1,18 @@
 'use client'
 
 import { useEffect, useSyncExternalStore, useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { useTheme } from '@teispace/next-themes'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { toast } from 'sonner'
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher'
+import { BrandLogo } from '@/components/shared/BrandLogo'
 import { wilayas } from '../../src/data/wilayas'
 import { getCommuneByCode } from '@/lib/utils/geoHelpers'
 import {
-  LogOut,
   Moon,
   Sun,
-  User as UserIcon,
   Menu,
   ChevronsLeft,
   ChevronsRight,
@@ -31,26 +28,6 @@ type Profile = {
   communeCode: string | null
 }
 
-const ROLE_LABEL_MAP: Record<string, string> = {
-  admin: 'role_admin',
-  agent: 'role_agent',
-  super_admin_wilaya: 'role_admin',
-  admin_commune: 'role_admin',
-  direction_ade_wilaya: 'role_admin',
-  direction_ade_commune: 'role_admin',
-  agent_terrain: 'role_agent',
-}
-
-const ROLE_BADGE_MAP: Record<string, string> = {
-  admin: 'bc-st-no',
-  agent: 'bc-st-att',
-  super_admin_wilaya: 'bc-st-no',
-  admin_commune: 'bc-st-no',
-  direction_ade_wilaya: 'bc-st-no',
-  direction_ade_commune: 'bc-st-no',
-  agent_terrain: 'bc-st-att',
-}
-
 export function Header({
   onToggleNav,
   collapsed = false,
@@ -61,7 +38,6 @@ export function Header({
   collapsed?: boolean
   onToggleCollapse?: () => void
 }) {
-  const router = useRouter()
   const locale = useLocale()
   const pathname = usePathname()
   const t = useTranslations('header')
@@ -104,32 +80,9 @@ export function Header({
     }
   }, [supabase])
 
-  const handleLogout = () => {
-    void (async () => {
-      await supabase.auth.signOut()
-      toast.info(t('logout_success'))
-      router.push(`/${locale}/login`)
-    })()
-  }
-
-  const initials =
-    profile?.nomComplet && profile.nomComplet.trim().length > 0
-      ? profile.nomComplet
-          .trim()
-          .split(/\s+/)
-          .slice(0, 2)
-          .map((p) => p[0]?.toUpperCase())
-          .join('')
-      : (profile?.email[0] ?? '?').toUpperCase()
-
-  const roleKey = ROLE_LABEL_MAP[profile?.role ?? ''] ?? 'role_citoyen'
-  const roleLabel = t(roleKey)
-  const roleBadgeClass =
-    ROLE_BADGE_MAP[profile?.role ?? ''] ?? 'bc-st-run'
-
   // Titre de section courant, déduit du pathname.
   const isEspace = pathname?.startsWith(`/${locale}/espace`)
-  const sectionTitle = isEspace ? t('my_reports') : t('dashboard_title')
+  const sectionTitle = isEspace ? t('my_reports') : t('welcome')
 
   // Sélecteur de territoire (lecture seule) : le périmètre est verrouillé
   // par le rôle, on affiche « Commune · Wilaya » dérivé du profil.
@@ -146,7 +99,7 @@ export function Header({
   return (
     <header
       data-od-id="header"
-      className="flex h-16 shrink-0 items-center justify-between gap-3 border-b bg-[var(--color-surface)] px-4"
+      className="grid h-16 shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-3 border-b bg-[var(--color-surface)] px-4"
     >
       <div className="flex min-w-0 items-center gap-2">
         {onToggleCollapse && (
@@ -185,7 +138,11 @@ export function Header({
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="justify-self-center">
+        <BrandLogo size="md" />
+      </div>
+
+      <div className="flex items-center justify-end gap-2">
         {territoryLabel && (
           <div
             data-od-id="territory-picker"
@@ -226,34 +183,6 @@ export function Header({
 
         {/* Language switcher (icône globe) */}
         <LanguageSwitcher />
-
-        {profile && (
-          <div className="flex items-center gap-2.5">
-            <div className="hidden sm:flex flex-col items-end leading-tight">
-              <span className="text-sm font-medium text-[var(--color-fg)]">
-                {profile.nomComplet ?? profile.email}
-              </span>
-              <span className="text-xs text-[var(--color-muted)]">
-                {profile.email}
-              </span>
-            </div>
-            <Badge variant="outline" className={`hidden md:inline-flex ${roleBadgeClass}`}>
-              {roleLabel}
-            </Badge>
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-accent)] text-sm font-semibold text-[var(--color-primary-foreground)]">
-              {initials}
-            </div>
-          </div>
-        )}
-        {!profile && (
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-surface-2)]">
-            <UserIcon className="h-4 w-4 text-[var(--color-muted)]" />
-          </div>
-        )}
-        <Button variant="outline" onClick={handleLogout} data-od-id="logout">
-          <LogOut className="h-4 w-4" />
-          <span className="hidden sm:inline">{t('logout')}</span>
-        </Button>
       </div>
     </header>
   )

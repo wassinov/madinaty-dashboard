@@ -1,4 +1,7 @@
 {
+  "brand": {
+    "slogan": "Report, we act"
+  },
   "common": {
     "loading": "Loading...",
     "loading_stats": "Loading stats...",
@@ -79,7 +82,7 @@
     "role_citoyen": "Citizen",
     "menu": "Open menu",
     "toggle_theme": "Toggle theme",
-    "dashboard_title": "Dashboard",
+    "welcome": "Welcome",
     "my_reports": "My reports",
     "collapse": "Collapse sidebar",
     "expand": "Expand sidebar",
@@ -87,7 +90,6 @@
   },
   "filters": {
     "statut": "Status",
-    "type": "Type",
     "wilaya": "Wilaya",
     "commune": "Municipality",
     "secteur": "Sector",
@@ -95,14 +97,11 @@
     "to_date": "To",
     "search_placeholder": "Search...",
     "all_statuses": "All",
-    "all_types": "All",
     "all_wilayas": "All",
     "all_communes": "All",
     "panel_title": "Filters",
     "open_panel": "Filters",
-    "reset": "Reset",
-    "show_list": "List",
-    "hide_list": "Close list"
+    "reset": "Reset"
   },
   "modal": {
     "title": "Report Details",
