@@ -18,9 +18,9 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-display",
 });
 
-// Wordmark « Madinaty » : police Excalifont (presente dans assets/fonts).
-const excalifont = localFont({
-  src: "../../assets/fonts/Excalifont-Regular.woff2",
+// Wordmark « Madinaty » : police RTL-Romman (presente dans assets/fonts).
+const rtlRomman = localFont({
+  src: "../../assets/fonts/RTL-Romman-Regular.ttf",
   variable: "--font-brand",
 });
 
@@ -53,7 +53,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       className={cn(
         "font-sans",
         geist.variable,
-        excalifont.variable,
+        rtlRomman.variable,
         spaceGrotesk.variable
       )}
     >

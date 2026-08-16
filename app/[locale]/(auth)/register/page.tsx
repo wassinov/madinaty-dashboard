@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
+import { BrandLogo } from "@/components/shared/BrandLogo";
 import { createClient } from "@/lib/supabase/client";
 import { useTranslations, useLocale } from "next-intl";
 import { validateRegister } from "@/lib/utils/registerValidation";
@@ -76,13 +76,7 @@ export default function RegisterPage() {
     return (
         <div className="flex min-h-screen items-center justify-center bg-[var(--color-bg)]">
             <div className="w-full max-w-md bg-[var(--color-surface)] p-8 rounded-lg shadow-md">
-                <Image
-                    src="/mansourah-blue.png"
-                    alt="Mansourah"
-                    width={64}
-                    height={64}
-                    className="h-16 w-16 rounded-lg object-cover mx-auto mb-4"
-                />
+                <BrandLogo size="xl" className="mb-4" />
                 <h1 className="text-2xl font-bold text-center mb-2">
                     {t("title")}
                 </h1>

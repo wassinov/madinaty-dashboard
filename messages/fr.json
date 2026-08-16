@@ -37,8 +37,6 @@
     "users": "Utilisateurs",
     "signaler": "Signaler un problème",
     "reports": "Liste de Signaux",
-    "wla_brand": "Madinaty",
-    "brand_subtitle": "Gestion urbaine",
     "collapse": "Réduire",
     "collapse_label": "Réduire",
     "group_pilotage": "Pilotage",
@@ -83,7 +81,6 @@
     "toggle_theme": "Basculer le thème",
     "dashboard_title": "Tableau de bord",
     "my_reports": "Mes signalements",
-    "scope_hint": "Périmètre de la wilaya d'Alger",
     "collapse": "Réduire la sidebar",
     "expand": "Déployer la sidebar",
     "notifications": "Notifications"

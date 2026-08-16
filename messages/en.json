@@ -37,8 +37,6 @@
     "users": "Users",
     "signaler": "Report a problem",
     "reports": "Report list",
-    "wla_brand": "Madinaty",
-    "brand_subtitle": "Urban management",
     "collapse": "Collapse",
     "collapse_label": "Collapse",
     "group_pilotage": "Overview",
@@ -83,7 +81,6 @@
     "toggle_theme": "Toggle theme",
     "dashboard_title": "Dashboard",
     "my_reports": "My reports",
-    "scope_hint": "Algiers wilaya scope",
     "collapse": "Collapse sidebar",
     "expand": "Expand sidebar",
     "notifications": "Notifications"

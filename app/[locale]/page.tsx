@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { AnnouncementBanner } from "@/components/dashboard/AnnouncementBanner";
 import { LanguageSwitcher } from "@/components/shared/LanguageSwitcher";
-import Image from "next/image";
+import { BrandLogo } from "@/components/shared/BrandLogo";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Megaphone, MapPinned, ClipboardList, Users } from "lucide-react";
@@ -77,16 +77,7 @@ export default async function HomePage({ params }: Props) {
   return (
     <main className="min-h-screen bg-[var(--color-bg)] flex flex-col">
       <header className="bg-[var(--color-surface)] border-b px-6 py-4 flex justify-between items-center shadow-sm sticky top-0 z-10">
-        <div className="flex items-center space-x-2">
-          <Image
-            src="/mansourah-blue.png"
-            alt="Mansourah"
-            width={32}
-            height={32}
-            className="h-8 w-8 rounded-md object-cover"
-          />
-          <h1 className="text-xl font-bold text-[var(--color-fg)]">{t("title")}</h1>
-        </div>
+        <BrandLogo size="md" align="left" />
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
           <Link href={`/${locale}/login`}>

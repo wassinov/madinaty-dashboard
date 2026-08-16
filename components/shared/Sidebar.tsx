@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
@@ -15,6 +14,7 @@ import {
   ClipboardList,
 } from 'lucide-react'
 import { cn } from '@/lib/utils/formatting'
+import { BrandLogo } from './BrandLogo'
 import { createClient } from '@/lib/supabase/client'
 
 type SidebarVariant = 'admin' | 'citoyen'
@@ -188,27 +188,11 @@ export function Sidebar({
     >
       <div
         className={cn(
-          'flex items-center border-b border-[var(--color-border)]',
-          collapsed ? 'justify-center px-0 py-4' : 'gap-2.5 px-4 py-4'
+          'flex items-center justify-center border-b border-[var(--color-border)]',
+          collapsed ? 'px-0 py-4' : 'px-4 py-4'
         )}
       >
-        <Image
-          src="/mansourah-blue.png"
-          alt="Mansourah"
-          width={32}
-          height={32}
-          className="h-8 w-8 shrink-0 rounded-md object-cover"
-        />
-        {!collapsed && (
-          <div className="min-w-0 leading-tight">
-            <span className="font-brand block text-xl text-[var(--color-fg)]">
-              {t('wla_brand')}
-            </span>
-            <span className="block text-[10px] uppercase tracking-wider text-[var(--color-muted)]">
-              {t('brand_subtitle')}
-            </span>
-          </div>
-        )}
+        <BrandLogo size="lg" compact={collapsed} />
       </div>
 
       <nav
