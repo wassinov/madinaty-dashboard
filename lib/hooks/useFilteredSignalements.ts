@@ -7,8 +7,8 @@ import { matchesDomain } from '@/lib/constants'
 
 /**
  * Applique les filtres du `FilterContext` à une liste de signalements.
- * Logique unique partagée entre la carte (`MapComponent`) et le tiroir
- * liste (`ReportDrawer`) : les deux vues restent par construction synchrones.
+ * Logique unique partagée entre la carte (`MapComponent`) et les autres vues
+ * (liste des signalements) : toutes les vues restent par construction synchrones.
  */
 export function useFilteredSignalements(
   signalements: Signalement[]

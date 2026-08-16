@@ -34,7 +34,6 @@ import {
   MAP_STYLE_URL_DARK,
   MARKER_BG_HEX,
   DOMAIN_KEYS,
-  DOMAIN_TYPES,
   DOMAIN_META,
 } from "@/lib/constants";
 
@@ -51,15 +50,62 @@ const wilayaBorderLayer: LayerProps = {
   paint: { "line-color": "#008a9e", "line-width": 1, "line-opacity": 0.45 },
 };
 
-// === Mapping type -> couleur hex (charte Madinaty) ===
-const TYPE_ICONS: Record<string, string> = {
-  fuite: "💧",
-  penurie: "🚱",
-  qualite_eau: "🧪",
-  assainissement: "🚽",
-  dechets: "🗑️",
-  eclairage_public: "💡",
+// === Glyphes vectoriels par domaine (tracés locaux, grille 24×24) ===
+// Marqueurs, légende, tooltip et popup partagent ces mêmes tracés SVG —
+// jamais d'emojis : la rasterisation des polices émoji sur canvas produit des
+// images transparentes selon l'OS. Remplissage plein, toujours visible.
+const GLYPHS: Record<string, string> = {
+  // Goutte d'eau (types du domaine « eau »)
+  droplet:
+    'M12 3 C 14.5 6.5 18.5 11 18.5 14.5 A 6.5 6.5 0 0 1 5.5 14.5 C 5.5 11 9.5 6.5 12 3 Z',
+  // Vague / écoulement (assainissement)
+  wave: 'M3 10 C 6 7 9 7 12 10 C 15 13 18 13 21 10 L 21 14 C 18 11 15 11 12 14 C 9 17 6 17 3 14 Z',
+  // Poubelle (déchets) : corps + couvercle + anse
+  trash:
+    'M7 8 L8.5 21 L15.5 21 L17 8 Z M5 5 L5 7 L19 7 L19 5 Z M9 3 L9 5 L15 5 L15 3 Z',
+  // Ampoule (éclairage) : verre + culot
+  bulb:
+    'M12 13 A 5.5 5.5 0 1 0 12 2 A 5.5 5.5 0 1 0 12 13 Z M9 15 L9 17 L15 17 L15 15 Z M10 18 L14 18 L14 19 L10 19 Z M10 20 L14 20 L14 21 L10 21 Z',
 };
+
+/** Type -> glyphe vectoriel (les 3 types « eau » partagent la goutte). */
+const TYPE_GLYPH: Record<string, string> = {
+  fuite: 'droplet',
+  penurie: 'droplet',
+  qualite_eau: 'droplet',
+  assainissement: 'wave',
+  dechets: 'trash',
+  eclairage_public: 'bulb',
+};
+
+/** Domaine -> glyphe vectoriel (légende). */
+const DOMAIN_GLYPH: Record<string, string> = {
+  eau: 'droplet',
+  assainissement: 'wave',
+  dechets: 'trash',
+  eclairage_public: 'bulb',
+};
+
+/** Icône vectorielle partagée (légende, tooltip, popup). */
+const GlyphIcon = ({
+  id,
+  className,
+  style,
+}: {
+  id: string
+  className?: string
+  style?: React.CSSProperties
+}) => (
+  <svg
+    viewBox="0 0 24 24"
+    className={className}
+    style={style}
+    fill="currentColor"
+    aria-hidden
+  >
+    <path d={GLYPHS[id] ?? GLYPHS.droplet} />
+  </svg>
+);
 
 // === Épingles teardrop (SVG OpenDesign) ===
 // Chemins centrés sur (0,0), pointe en bas. Coordonnées reprises du
@@ -68,7 +114,7 @@ const TYPE_ICONS: Record<string, string> = {
 // Couleurs par DOMAINE via les tokens OKLCh (--d-*), passées par l'attribut
 // `fill` (variable CSS résolue puis héritée par les chemins) ; le point
 // central suit `--color-surface` (s'inverse en dark).
-type PinMarkerProps = { color: string };
+type PinMarkerProps = { color: string; glyph?: string };
 
 const PIN_LARGE_VIEWBOX = "-13 -16 26 30";
 
@@ -76,7 +122,7 @@ const TeardropShape = () => (
   <path d="M0 14 C 0 14 -11 4 -11 -5 A 11 11 0 1 1 11 -5 C 11 4 0 14 0 14 Z" />
 );
 
-const PinMarker = ({ color }: PinMarkerProps) => (
+const PinMarker = ({ color, glyph }: PinMarkerProps) => (
   <svg
     viewBox={PIN_LARGE_VIEWBOX}
     preserveAspectRatio="none"
@@ -87,15 +133,22 @@ const PinMarker = ({ color }: PinMarkerProps) => (
   >
     <TeardropShape />
     <circle cx="0" cy="-5" r="4" fill="var(--color-surface)" />
+    {glyph && (
+      <path
+        d={glyph}
+        transform="translate(0 -5) scale(0.29) translate(-12 -12)"
+        fill="currentColor"
+      />
+    )}
   </svg>
 );
 
 // === Marqueur sélectionné : grande épingle + anneau pulsant accent ===
 // L'anneau est un overlay CSS (cercle `border` + keyframes) : circulaire quel
 // que soit le ratio bouton/SVG, insensible au RTL.
-const PinMarkerSelected = ({ color }: PinMarkerProps) => (
+const PinMarkerSelected = ({ color, glyph }: PinMarkerProps) => (
   <span className="marker-pin-stack">
-    <PinMarker color={color} />
+    <PinMarker color={color} glyph={glyph} />
     <span className="pulse-ring" aria-hidden />
   </span>
 );
@@ -122,49 +175,54 @@ type Props = {
 // pulsant) pour rester affûté / interactif.
 const ICON_PREFIX = "sig-";
 
-// Reverse lookup type -> domaine (légende chemin inverse de DOMAIN_TYPES).
-const typeToDomain: Record<string, string> = {};
-for (const [key, types] of Object.entries(DOMAIN_TYPES)) {
-  for (const t of types) typeToDomain[t] = key;
-}
-const domainOfType = (t: string) => typeToDomain[t] ?? "eau";
-
-// Icône sprite : même teardrop que PinMarkerSmall mais rasterisé sur un
-// canvas offscreen (couleur du DOMAINE en hex ; point central translucide,
-// neutre dark/light). Retourne un `ImageData` car maplibre-gl 4.x rejette les
-// HTMLCanvasElement dans `addImage` (traités comme {width,height,data} avec
-// `.data` manquant => image vide). `ImageData` possède width/height/data et
-// est accepté sans risque.
-const PIN_SPRITE_W = 22;
-const PIN_SPRITE_H = 24;
+// Icône sprite par TYPE : pastille blanche + glyphe vectoriel du type (mêmes
+// tracés que la légende, `GLYPHS`) + anneau de couleur cohérent avec les
+// pastilles de la légende (`MARKER_BG_HEX`). Rasterisée sur un canvas offscreen.
+// Retourne une `ImageData` car maplibre-gl 4.x rejette les HTMLCanvasElement
+// dans `addImage` (traités comme {width,height,data} avec `.data` manquant =>
+// image vide). `ImageData` possède width/height/data et est accepté sans risque.
+const PIN_SPRITE_SIZE = 24;
 // Résolution interne 2× pour un rendu net ; la taille affichée (CSS) reste
 // pilotée par `icon-size` : css_px = (canvas / pixelRatio) × icon-size.
 const PIN_SPRITE_DPR = 2;
 
-function drawPinSprite(color: string): ImageData {
+function drawTypeSprite(glyph: string, ringColor: string): ImageData {
+  const size = PIN_SPRITE_SIZE;
   const canvas = document.createElement('canvas');
-  canvas.width = PIN_SPRITE_W * PIN_SPRITE_DPR;
-  canvas.height = PIN_SPRITE_H * PIN_SPRITE_DPR;
+  canvas.width = size * PIN_SPRITE_DPR;
+  canvas.height = size * PIN_SPRITE_DPR;
   const ctx = canvas.getContext('2d');
   if (!ctx) {
     return new ImageData(canvas.width, canvas.height);
   }
-
-  // Le tracé est défini dans la viewBox « -11 -13 … » centrée sur (0,0) avec la
-  // pointe en bas (y = 11). On translate pour caler la pointe sur le bord bas.
   ctx.scale(PIN_SPRITE_DPR, PIN_SPRITE_DPR);
-  ctx.translate(PIN_SPRITE_W / 2, PIN_SPRITE_H / 2);
 
-  const path = new Path2D(
-    'M0 11 C 0 11 -8.5 3 -8.5 -3.8 A 8.5 8.5 0 1 1 8.5 -3.8 C 8.5 3 0 11 0 11 Z'
-  );
-  ctx.fillStyle = color;
-  ctx.fill(path);
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = cx - 1;
 
+  // Pastille blanche
   ctx.beginPath();
-  ctx.arc(0, -3.8, 3, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffffff';
   ctx.fill();
+
+  // Glyphe vectoriel du type, centré dans la pastille (tracé SVG -> Path2D,
+  // rempli avec la couleur du type ; toujours visible, aucune police)
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.scale(0.6, 0.6);
+  ctx.translate(-12, -12);
+  ctx.fillStyle = ringColor;
+  ctx.fill(new Path2D(glyph));
+  ctx.restore();
+
+  // Anneau de couleur du type (identique aux pastilles de la légende)
+  ctx.beginPath();
+  ctx.arc(cx, cy, r - 0.5, 0, Math.PI * 2);
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = ringColor;
+  ctx.stroke();
 
   return ctx.getImageData(0, 0, canvas.width, canvas.height);
 }
@@ -173,9 +231,9 @@ const pointSymbolLayer: LayerProps = {
   id: "signalements-points",
   type: "symbol",
   layout: {
-    "icon-image": ["get", "domain"],
-    "icon-size": 1.5,
-    "icon-anchor": "bottom",
+    "icon-image": ["get", "icon"],
+    "icon-size": 1.3,
+    "icon-anchor": "center",
     "icon-allow-overlap": false,
   },
 };
@@ -276,7 +334,7 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
           properties: {
             id: s.id,
             type: s.type,
-            domain: `${ICON_PREFIX}${domainOfType(s.type)}`,
+            icon: `${ICON_PREFIX}${s.type}`,
           },
         })),
     }),
@@ -286,17 +344,21 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
   const [iconsReady, setIconsReady] = useState(false);
   const styledataBoundRef = useRef(false);
 
-  // Épingles sprite par domaine : rasterisées sur canvas (aucune dépendance
-  // au réseau/CSP) puis injectées dans le sprite MapLibre. Idempotent via
-  // `hasImage` — sûr à rappeler à chaque rechargement de style.
-  const addDomainIcons = useCallback((map: MapLibreMap) => {
-    for (const key of DOMAIN_KEYS) {
-      const name = `${ICON_PREFIX}${key}`;
+  // Épingles sprite par type : pastille blanche + glyphe vectoriel, rasterisés
+  // sur canvas (aucune dépendance au réseau/CSP) puis injectés dans le sprite
+  // MapLibre. Idempotent via `hasImage` — sûr à rappeler à chaque rechargement
+  // de style.
+  const addTypeIcons = useCallback((map: MapLibreMap) => {
+    for (const t of Object.keys(TYPE_GLYPH)) {
+      const name = `${ICON_PREFIX}${t}`;
       try {
         if (!map.hasImage(name)) {
           map.addImage(
             name,
-            drawPinSprite(DOMAIN_META[key].color),
+            drawTypeSprite(
+              GLYPHS[TYPE_GLYPH[t]] ?? GLYPHS.droplet,
+              MARKER_BG_HEX[t] ?? '#6b7280'
+            ),
             { pixelRatio: PIN_SPRITE_DPR }
           );
         }
@@ -316,7 +378,7 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
     (evt: { target: MapLibreMap }) => {
       const map = evt.target;
       if (map.isStyleLoaded()) {
-        addDomainIcons(map);
+        addTypeIcons(map);
         setIconsReady(true);
         map.triggerRepaint();
       }
@@ -324,13 +386,13 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
         styledataBoundRef.current = true;
         map.on('styledata', () => {
           if (map.isStyleLoaded()) {
-            addDomainIcons(map);
+            addTypeIcons(map);
             map.triggerRepaint();
           }
         });
       }
     },
-    [addDomainIcons]
+    [addTypeIcons]
   );
 
   const handleMapClick = (e: MapLayerMouseEvent) => {
@@ -400,6 +462,7 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
             >
               <PinMarkerSelected
                 color={TYPE_DOMAIN_COLOR[popupInfo.type] ?? 'var(--prio-l)'}
+                glyph={GLYPHS[TYPE_GLYPH[popupInfo.type]] ?? GLYPHS.droplet}
               />
             </span>
           </Marker>
@@ -416,7 +479,13 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
           >
             <div className="p-1 text-sm max-w-[220px]">
               <strong className="block text-base mb-1">
-                {TYPE_ICONS[popupInfo.type] ?? "📍"}{" "}
+                <GlyphIcon
+                  id={TYPE_GLYPH[popupInfo.type]}
+                  className="me-1 inline h-4 w-4 align-[-3px]"
+                  style={{
+                    color: MARKER_BG_HEX[popupInfo.type] ?? '#6b7280',
+                  }}
+                />
                 {tTypes(popupInfo.type)}
               </strong>
               <p className="text-[var(--color-muted)] mb-1 line-clamp-3">
@@ -449,6 +518,27 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
         data-od-id="map-legend"
         className="pointer-events-auto absolute bottom-3 start-3 z-20 flex flex-col gap-1 rounded-lg bg-[var(--color-surface)]/90 p-2 shadow-lg backdrop-blur-md sm:gap-1.5"
       >
+        {/* Filtre « Tout » : aucun domaine sélectionné */}
+        <div className="group relative">
+          <button
+            type="button"
+            onClick={() => setFilters({ domaine: null })}
+            aria-pressed={filters.domaine === null}
+            data-od-id="map-legend-all"
+            className={cn(
+              'flex w-full items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-medium transition-colors',
+              filters.domaine === null
+                ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]'
+                : 'border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-muted)] hover:text-[var(--color-fg)]'
+            )}
+          >
+            <span
+              className="h-2 w-2 shrink-0 rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)]"
+              aria-hidden
+            />
+            <span>{tDomains('all')}</span>
+          </button>
+        </div>
         {DOMAIN_KEYS.map((key) => {
           const meta = DOMAIN_META[key];
           const active = filters.domaine === key;
@@ -471,12 +561,11 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
                     : 'border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-muted)] hover:text-[var(--color-fg)]'
                 )}
               >
-                <span
-                  className="h-2 w-2 shrink-0 rounded-full"
-                  style={{ backgroundColor: meta.color }}
-                  aria-hidden
+                <GlyphIcon
+                  id={DOMAIN_GLYPH[key]}
+                  className="h-3.5 w-3.5 shrink-0"
+                  style={{ color: meta.color }}
                 />
-                <span aria-hidden>{meta.emoji}</span>
                 <span>{tDomains(meta.label)}</span>
               </button>
 
@@ -495,13 +584,12 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
                         key={type}
                         className="flex items-center gap-2 text-xs text-[var(--color-fg)]"
                       >
-                        <span
-                          className="h-2.5 w-2.5 shrink-0 rounded-full"
+                        <GlyphIcon
+                          id={TYPE_GLYPH[type]}
+                          className="h-3.5 w-3.5 shrink-0"
                           style={{
-                            backgroundColor:
-                              MARKER_BG_HEX[type] ?? '#6b7280',
+                            color: MARKER_BG_HEX[type] ?? '#6b7280',
                           }}
-                          aria-hidden
                         />
                         <span>{tTypes(type)}</span>
                       </li>

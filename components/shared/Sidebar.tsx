@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import type { LucideIcon } from 'lucide-react'
 import {
@@ -12,10 +12,12 @@ import {
   Users,
   MapPinned,
   ClipboardList,
+  LogOut,
 } from 'lucide-react'
 import { cn } from '@/lib/utils/formatting'
-import { BrandLogo } from './BrandLogo'
 import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
 
 type SidebarVariant = 'admin' | 'citoyen'
 
@@ -55,6 +57,7 @@ export function Sidebar({
 }) {
   const pathname = usePathname()
   const locale = useLocale()
+  const router = useRouter()
   const t = useTranslations('sidebar')
   const tHeader = useTranslations('header')
   const [profile, setProfile] = useState<{
@@ -87,6 +90,15 @@ export function Sidebar({
       active = false
     }
   }, [])
+
+  const handleLogout = () => {
+    void (async () => {
+      const supabase = createClient()
+      await supabase.auth.signOut()
+      toast.info(tHeader('logout_success'))
+      router.push(`/${locale}/login`)
+    })()
+  }
 
   const citoyenNav: NavItemDef[] = [
     {
@@ -186,15 +198,6 @@ export function Sidebar({
         collapsed ? 'w-16' : 'w-64'
       )}
     >
-      <div
-        className={cn(
-          'flex items-center justify-center border-b border-[var(--color-border)]',
-          collapsed ? 'px-0 py-4' : 'px-4 py-4'
-        )}
-      >
-        <BrandLogo size="lg" compact={collapsed} />
-      </div>
-
       <nav
         className={cn(
           'flex-1 overflow-y-auto',
@@ -240,23 +243,50 @@ export function Sidebar({
 
       <div
         className={cn(
-          'flex items-center gap-2 border-t border-[var(--color-border)] py-3',
-          collapsed ? 'justify-center px-2' : 'px-3'
+          'flex border-t border-[var(--color-border)] py-3',
+          collapsed
+            ? 'flex-col items-center gap-2 px-2'
+            : 'items-center gap-2 px-3'
         )}
       >
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-sm font-semibold text-[var(--color-primary-foreground)]">
-          {initials}
+        <div
+          className={cn(
+            'flex min-w-0 items-center gap-2',
+            !collapsed && 'flex-1'
+          )}
+        >
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-sm font-semibold text-[var(--color-primary-foreground)]">
+            {initials}
+          </div>
+          {!collapsed && (
+            <div className="min-w-0 leading-tight">
+              <p className="truncate text-sm font-medium text-[var(--color-fg)]">
+                {profile?.nomComplet ?? profile?.email}
+              </p>
+              <p className="truncate text-xs text-[var(--color-muted)]">
+                {roleLabel}
+              </p>
+            </div>
+          )}
         </div>
         {!collapsed && (
-          <div className="min-w-0 leading-tight">
-            <p className="truncate text-sm font-medium text-[var(--color-fg)]">
-              {profile?.nomComplet ?? profile?.email}
-            </p>
-            <p className="truncate text-xs text-[var(--color-muted)]">
-              {roleLabel}
-            </p>
-          </div>
+          <div
+            className="h-8 w-px shrink-0 bg-[var(--color-border)]"
+            aria-hidden
+          />
         )}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={handleLogout}
+          title={tHeader('logout')}
+          aria-label={tHeader('logout')}
+          data-od-id="logout"
+          className="shrink-0"
+        >
+          <LogOut className="h-4 w-4" />
+        </Button>
       </div>
     </aside>
   )
