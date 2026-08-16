@@ -182,9 +182,6 @@ export function Header({
           >
             {sectionTitle}
           </h1>
-          <p className="truncate text-xs text-[var(--color-muted)]">
-            {t('scope_hint')}
-          </p>
         </div>
       </div>
 
@@ -193,7 +190,6 @@ export function Header({
           <div
             data-od-id="territory-picker"
             className="hidden items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] px-3 py-1.5 text-xs font-medium text-[var(--color-fg)] md:inline-flex"
-            title={t('scope_hint')}
           >
             <MapPin className="h-3.5 w-3.5 text-[var(--color-accent)]" />
             <span className="max-w-[200px] truncate">{territoryLabel}</span>

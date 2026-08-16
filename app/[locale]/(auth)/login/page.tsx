@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
+import { BrandLogo } from "@/components/shared/BrandLogo";
 import { createClient } from "@/lib/supabase/client";
 import { useTranslations, useLocale } from "next-intl";
 import { ADMIN_ROLES } from "@/lib/constants/roles";
@@ -70,19 +70,7 @@ export default function LoginPage() {
     return (
         <div className="flex min-h-screen items-center justify-center bg-[var(--color-bg)] px-4">
             <div className="w-full max-w-md bg-[var(--color-surface)] p-8 rounded-lg shadow-md border border-[var(--color-border)]">
-                <Image
-                    src="/mansourah-blue.png"
-                    alt="Mansourah"
-                    width={64}
-                    height={64}
-                    className="h-16 w-16 rounded-lg object-cover mx-auto mb-4"
-                />
-                <h1 className="font-brand text-3xl font-bold text-center mb-1 text-[var(--color-navy)]">
-                    {t("title")}
-                </h1>
-                <p className="text-center text-sm text-[var(--color-muted)] mb-6">
-                    {t("subtitle")}
-                </p>
+                <BrandLogo size="xl" className="mb-6" />
                 <form onSubmit={handleLogin} className="space-y-4">
                     <input
                         type="email"

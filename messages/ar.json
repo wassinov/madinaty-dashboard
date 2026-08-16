@@ -37,8 +37,6 @@
     "users": "المستخدمون",
     "signaler": "الإبلاغ عن مشكلة",
     "reports": "قائمة البلاغات",
-    "wla_brand": "Madinaty",
-    "brand_subtitle": "الإدارة الحضرية",
     "collapse": "طي",
     "collapse_label": "طي",
     "group_pilotage": "القيادة",
@@ -83,7 +81,6 @@
     "toggle_theme": "تبديل السمة",
     "dashboard_title": "لوحة القيادة",
     "my_reports": "بلاغاتي",
-    "scope_hint": "نطاق ولاية الجزائر",
     "collapse": "طي الشريط الجانبي",
     "expand": "توسيع الشريط الجانبي",
     "notifications": "الإشعارات"
