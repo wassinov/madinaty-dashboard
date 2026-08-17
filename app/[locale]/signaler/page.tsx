@@ -7,6 +7,7 @@ import type { UserRole } from "@/types/database";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { TypeGlyph } from "@/components/shared/TypeGlyph";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -39,7 +40,7 @@ export default async function SignalerPage({ params }: Props) {
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">{t("back_to_dashboard")}</span>
           </Link>
-          <span className="text-2xl" role="img" aria-hidden="true">💧</span>
+          <TypeGlyph id="droplet" className="h-7 w-7 text-[var(--color-accent)]" />
           <h1 className="text-xl font-bold text-[var(--color-fg)]">{t("title")}</h1>
         </div>
         <div className="flex items-center gap-3">

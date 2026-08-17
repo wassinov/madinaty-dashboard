@@ -291,7 +291,17 @@
     "submitting": "Connecting...",
     "register_prompt": "No account yet?",
     "register_link": "Sign up",
-    "registered_success": "Account created successfully. You can now sign in."
+    "registered_success": "Account created successfully. You can now sign in.",
+    "back_home": "Back to home",
+    "welcome_title": "Madinaty management portal",
+    "welcome_text": "Manage your territory's reports in one place: water, sanitation, waste and public lighting.",
+    "feature_1_title": "Real-time reports",
+    "feature_1_text": "See every request on the map as soon as it is filed.",
+    "feature_2_title": "Territory analytics",
+    "feature_2_text": "KPIs and trends by wilaya and commune to guide your actions.",
+    "feature_3_title": "Announcements & communication",
+    "feature_3_text": "Keep citizens informed and coordinate your interventions.",
+    "security_note": "Secure sign-in — your data stays protected."
   },
   "register": {
     "title": "Create an account",
@@ -311,7 +321,18 @@
     "submitting": "Creating account...",
     "login_prompt": "Already have an account?",
     "login_link": "Sign in",
+    "back_home": "Back to home",
     "error_generic": "An error occurred during sign up."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No new notifications",
+    "unread": "{count} unread",
+    "view_all": "View my reports",
+    "statut_en_attente": "Your report is waiting to be processed",
+    "statut_en_cours": "Your report is being processed",
+    "statut_resolu": "Your report has been resolved",
+    "statut_rejete": "Your report has been rejected"
   },
   "csv": {
     "button": "Export CSV",

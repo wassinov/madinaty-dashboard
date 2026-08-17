@@ -25,7 +25,7 @@ export const SIGNALEMENT_STATUTS = [
 
 export const STATUT_COLORS = {
   en_attente: '#f59e0b',
-  en_cours: '#00a3c4',
+  en_cours: '#004aad',
   resolu: '#10b981',
   rejete: '#64748b',
 } as const

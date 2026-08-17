@@ -22,7 +22,7 @@ type Datum = {
 
 const STATUT_COLORS: Record<string, string> = {
   en_attente: '#e8a33c',
-  en_cours: '#4c83e8',
+  en_cours: '#004aad',
   resolu: '#2f9e6e',
   rejete: '#c25450',
 }

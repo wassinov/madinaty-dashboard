@@ -48,12 +48,12 @@ import {
 const wilayaFillLayer: LayerProps = {
   id: "wilayas-fill",
   type: "fill",
-  paint: { "fill-color": "#00a3c4", "fill-opacity": 0.05 },
+  paint: { "fill-color": "#004aad", "fill-opacity": 0.05 },
 };
 const wilayaBorderLayer: LayerProps = {
   id: "wilayas-border",
   type: "line",
-  paint: { "line-color": "#008a9e", "line-width": 1, "line-opacity": 0.45 },
+  paint: { "line-color": "#003a8c", "line-width": 1, "line-opacity": 0.45 },
 };
 
 // === Épingles teardrop (SVG OpenDesign) ===
@@ -469,7 +469,7 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
       {/* Légende interactive par domaine : clic = filtre, survol = sous-types */}
       <div
         data-od-id="map-legend"
-        className="pointer-events-auto absolute bottom-3 start-3 z-20 flex flex-col gap-1 rounded-lg bg-[var(--color-surface)]/90 p-2 shadow-lg backdrop-blur-md sm:gap-1.5"
+        className="pointer-events-auto absolute top-3 start-3 z-20 flex flex-row flex-wrap items-center gap-1 rounded-lg bg-[var(--color-surface)]/90 p-1.5 shadow-lg backdrop-blur-md sm:gap-1.5"
       >
         {/* Filtre « Tout » : aucun domaine sélectionné */}
         <div className="group relative">
@@ -479,7 +479,7 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
             aria-pressed={filters.domaine === null}
             data-od-id="map-legend-all"
             className={cn(
-              'flex w-full items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-medium transition-colors',
+              'flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-medium transition-colors',
               filters.domaine === null
                 ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]'
                 : 'border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-muted)] hover:text-[var(--color-fg)]'
@@ -508,7 +508,7 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
                 }
                 aria-pressed={active}
                 className={cn(
-                  'flex w-full items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-medium transition-colors',
+                  'flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-medium transition-colors',
                   active
                     ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]'
                     : 'border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-muted)] hover:text-[var(--color-fg)]'
@@ -524,7 +524,7 @@ export function MapComponent({ signalements, onSelectSignalement }: Props) {
 
               {/* Tooltip animé : sous-types du domaine */}
               <div
-                className="map-tooltip pointer-events-none absolute bottom-full start-1/2 z-30 hidden -translate-x-1/2 pb-1 group-hover:block rtl:translate-x-1/2"
+                className="map-tooltip pointer-events-none absolute top-full start-1/2 z-30 hidden -translate-x-1/2 pt-1 group-hover:block rtl:translate-x-1/2"
                 role="tooltip"
               >
                 <div className="w-max max-w-[220px] rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-xl">

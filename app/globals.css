@@ -11,8 +11,8 @@
     --color-fg: oklch(0.3 0.03 250);                /* #1A2A3C */
     --color-muted: oklch(0.55 0.03 250);            /* #5C6F83 */
     --color-border: oklch(0.91 0.01 244);           /* #E2E8F0 */
-    --color-accent: oklch(0.605 0.145 207);         /* #00A3C4 */
-    --color-accent-strong: oklch(0.5 0.13 205);     /* #008A9E */
+    --color-accent: oklch(0.436 0.171 259);         /* #004AAD */
+    --color-accent-strong: oklch(0.373 0.147 259);  /* #003A8C */
     --color-primary-foreground: oklch(1 0 0);       /* texte sur accent */
     --color-navy: oklch(0.26 0.055 249);            /* #0F2B4A */
     --color-navy-2: oklch(0.225 0.05 252);
@@ -40,7 +40,7 @@
     --card-foreground: 0.3 0.03 250;
     --popover: 1 0 0;
     --popover-foreground: 0.3 0.03 250;
-    --primary: 0.605 0.145 207;
+    --primary: 0.436 0.171 259;
     --primary-foreground: 1 0 0;
     --secondary: 0.985 0.004 228;
     --secondary-foreground: 0.3 0.03 250;
@@ -52,7 +52,7 @@
     --destructive-foreground: 1 0 0;
     --border: 0.91 0.01 244;
     --input: 0.91 0.01 244;
-    --ring: 0.605 0.145 207;
+    --ring: 0.436 0.171 259;
     --radius: 0.5rem;
   }
 
@@ -64,9 +64,9 @@
     --color-fg: oklch(0.92 0.015 240);              /* #ECF2F9 */
     --color-muted: oklch(0.68 0.03 240);            /* #9EB4CA */
     --color-border: oklch(0.31 0.025 250);          /* #2F4058 */
-    --color-accent: oklch(0.72 0.16 208);           /* #38C9E6 */
-    --color-accent-soft: oklch(0.72 0.16 208 / 0.14);
-    --color-accent-strong: oklch(0.78 0.15 208);
+    --color-accent: oklch(0.68 0.15 259);           /* bleu de marque (clair) */
+    --color-accent-soft: oklch(0.68 0.15 259 / 0.14);
+    --color-accent-strong: oklch(0.75 0.13 259);
     --color-primary-foreground: oklch(0.13 0.03 250);
     --color-navy: oklch(0.23 0.04 258);             /* #13233C */
     --color-navy-2: oklch(0.26 0.045 258);
@@ -92,7 +92,7 @@
     --card-foreground: 0.92 0.015 240;
     --popover: 0.22 0.025 248;
     --popover-foreground: 0.92 0.015 240;
-    --primary: 0.72 0.16 208;
+    --primary: 0.68 0.15 259;
     --primary-foreground: 0.13 0.03 250;
     --secondary: 0.26 0.025 248;
     --secondary-foreground: 0.92 0.015 240;
@@ -104,7 +104,7 @@
     --destructive-foreground: 1 0 0;
     --border: 0.31 0.025 250;
     --input: 0.31 0.025 250;
-    --ring: 0.72 0.16 208;
+    --ring: 0.68 0.15 259;
   }
 }
 
@@ -192,12 +192,12 @@
 
   /* Statuts */
   .bc-st-att { background: rgba(245, 158, 11, 0.12); color: oklch(0.46 0.14 70); border-color: rgba(245, 158, 11, 0.3); }
-  .bc-st-run { background: rgba(0, 163, 196, 0.1); color: oklch(0.4 0.1 207); border-color: rgba(0, 163, 196, 0.3); }
+  .bc-st-run { background: rgba(0, 74, 173, 0.1); color: oklch(0.4 0.11 259); border-color: rgba(0, 74, 173, 0.3); }
   .bc-st-ok  { background: rgba(16, 185, 129, 0.12); color: oklch(0.42 0.13 160); border-color: rgba(16, 185, 129, 0.3); }
   .bc-st-no  { background: rgba(100, 116, 139, 0.12); color: oklch(0.45 0.02 250); border-color: rgba(100, 116, 139, 0.3); }
 
   .dark .bc-st-att { color: oklch(0.8 0.14 70); }
-  .dark .bc-st-run { color: oklch(0.8 0.12 207); }
+  .dark .bc-st-run { color: oklch(0.8 0.12 259); }
   .dark .bc-st-ok  { color: oklch(0.78 0.13 160); }
   .dark .bc-st-no  { color: oklch(0.7 0.02 250); }
 
@@ -224,12 +224,12 @@
   /* Annonces */
   .bc-ann-urgent { background: rgba(239, 68, 68, 0.1); color: oklch(0.42 0.16 27); border-color: rgba(239, 68, 68, 0.35); }
   .bc-ann-warning { background: rgba(245, 158, 11, 0.1); color: oklch(0.46 0.15 70); border-color: rgba(245, 158, 11, 0.35); }
-  .bc-ann-info { background: rgba(0, 163, 196, 0.08); color: oklch(0.4 0.1 207); border-color: rgba(0, 163, 196, 0.3); }
+  .bc-ann-info { background: rgba(0, 74, 173, 0.08); color: oklch(0.4 0.11 259); border-color: rgba(0, 74, 173, 0.3); }
   .bc-ann-tip { background: rgba(16, 185, 129, 0.08); color: oklch(0.4 0.11 160); border-color: rgba(16, 185, 129, 0.3); }
 
   .dark .bc-ann-urgent { color: oklch(0.72 0.14 27); }
   .dark .bc-ann-warning { color: oklch(0.8 0.14 70); }
-  .dark .bc-ann-info { color: oklch(0.8 0.12 207); }
+  .dark .bc-ann-info { color: oklch(0.8 0.12 259); }
   .dark .bc-ann-tip { color: oklch(0.78 0.12 160); }
 }
 
@@ -250,7 +250,7 @@
 @layer components {
   .kpi-bar-total { background: var(--color-accent); }
   .kpi-bar-att { background: var(--st-att); }
-  .kpi-bar-run { background: var(--d-eau); }
+  .kpi-bar-run { background: var(--color-accent); }
   .kpi-bar-ok { background: var(--st-ok); }
   .kpi-bar-sla { background: var(--st-no); }
   .kpi-bar-no { background: var(--prio-l); }

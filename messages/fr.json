@@ -291,7 +291,17 @@
     "submitting": "Connexion...",
     "register_prompt": "Pas encore de compte ?",
     "register_link": "S'inscrire",
-    "registered_success": "Compte créé avec succès. Vous pouvez vous connecter."
+    "registered_success": "Compte créé avec succès. Vous pouvez vous connecter.",
+    "back_home": "Retour à l'accueil",
+    "welcome_title": "Espace de gestion Madinaty",
+    "welcome_text": "Pilotez les signalements de votre territoire en un seul endroit : eau, assainissement, déchets et éclairage public.",
+    "feature_1_title": "Signalements en temps réel",
+    "feature_1_text": "Visualisez chaque demande sur la carte dès son dépôt.",
+    "feature_2_title": "Statistiques par territoire",
+    "feature_2_text": "KPIs et tendances par wilaya et commune pour guider vos actions.",
+    "feature_3_title": "Annonces & communication",
+    "feature_3_text": "Informez les citoyens et coordonnez vos interventions.",
+    "security_note": "Connexion sécurisée — vos données restent protégées."
   },
   "register": {
     "title": "Créer un compte",
@@ -311,7 +321,18 @@
     "submitting": "Création du compte...",
     "login_prompt": "Déjà un compte ?",
     "login_link": "Se connecter",
+    "back_home": "Retour à l'accueil",
     "error_generic": "Une erreur est survenue lors de l'inscription."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "Aucune nouvelle notification",
+    "unread": "{count} non lue(s)",
+    "view_all": "Voir mes signalements",
+    "statut_en_attente": "Votre signalement est en attente de traitement",
+    "statut_en_cours": "Votre signalement est en cours de traitement",
+    "statut_resolu": "Votre signalement a été résolu",
+    "statut_rejete": "Votre signalement a été rejeté"
   },
   "csv": {
     "button": "Exporter CSV",

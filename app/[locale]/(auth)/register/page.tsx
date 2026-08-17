@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { BrandLogo } from "@/components/shared/BrandLogo";
+import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useTranslations, useLocale } from "next-intl";
 import { validateRegister } from "@/lib/utils/registerValidation";
@@ -74,9 +75,18 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-[var(--color-bg)]">
-            <div className="w-full max-w-md bg-[var(--color-surface)] p-8 rounded-lg shadow-md">
-                <BrandLogo size="xl" className="mb-4" />
+        <div className="relative flex min-h-screen items-center justify-center bg-[var(--color-bg)] px-4">
+            <Link
+                href={`/${locale}`}
+                className="absolute top-4 start-4 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-accent)] hover:bg-[var(--color-surface-2)]"
+            >
+                <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
+                {t("back_home")}
+            </Link>
+            <div className="w-full max-w-md bg-[var(--color-surface)] p-8 rounded-lg shadow-md border border-[var(--color-border)]">
+                <Link href={`/${locale}`} title={t("back_home")}>
+                    <BrandLogo size="xl" className="mb-4" />
+                </Link>
                 <h1 className="text-2xl font-bold text-center mb-2">
                     {t("title")}
                 </h1>
@@ -89,7 +99,7 @@ export default function RegisterPage() {
                         placeholder={t("field_name_label")}
                         value={nomComplet}
                         onChange={(e) => setNomComplet(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-[var(--color-border)] rounded-md bg-[var(--color-surface)] text-[var(--color-fg)] outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
                         required
                     />
                     <input
@@ -97,7 +107,7 @@ export default function RegisterPage() {
                         placeholder={t("field_email_label")}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-[var(--color-border)] rounded-md bg-[var(--color-surface)] text-[var(--color-fg)] outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
                         required
                     />
                     <input
@@ -105,14 +115,14 @@ export default function RegisterPage() {
                         placeholder={t("field_phone_label")}
                         value={telephone}
                         onChange={(e) => setTelephone(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-[var(--color-border)] rounded-md bg-[var(--color-surface)] text-[var(--color-fg)] outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
                     />
                     <input
                         type="password"
                         placeholder={t("field_password_label")}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-[var(--color-border)] rounded-md bg-[var(--color-surface)] text-[var(--color-fg)] outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
                         required
                     />
                     <input
@@ -120,14 +130,14 @@ export default function RegisterPage() {
                         placeholder={t("field_confirm_password_label")}
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-[var(--color-border)] rounded-md bg-[var(--color-surface)] text-[var(--color-fg)] outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
                         required
                     />
                     {error && <p className="text-[var(--st-no)] text-sm">{error}</p>}
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-2 px-4 bg-[var(--color-accent)] text-white rounded-md hover:opacity-90 disabled:opacity-50"
+                        className="w-full py-2 px-4 bg-[var(--color-accent)] text-[var(--color-primary-foreground)] rounded-md hover:opacity-90 disabled:opacity-50"
                     >
                         {loading ? t("submitting") : t("submit")}
                     </button>

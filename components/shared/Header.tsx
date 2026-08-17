@@ -8,11 +8,14 @@ import { Button } from '@/components/ui/button'
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher'
 import { ThemeToggle } from '@/components/shared/ThemeToggle'
 import { BrandLogo } from '@/components/shared/BrandLogo'
+import { NotificationBell } from '@/components/shared/NotificationBell'
+import { useCitizenNotifications } from '@/hooks/useCitizenNotifications'
 import { wilayas } from '../../src/data/wilayas'
 import { getCommuneByCode } from '@/lib/utils/geoHelpers'
 import { Menu, ChevronsLeft, ChevronsRight, MapPin, Bell } from 'lucide-react'
 
 type Profile = {
+  id: string
   email: string
   nomComplet: string | null
   role: string
@@ -54,6 +57,7 @@ export function Header({
 
       if (!active) return
       setProfile({
+        id: user.id,
         email: user.email ?? '',
         nomComplet: row?.nom_complet ?? null,
         role: (row?.role as string) ?? 'citoyen',
@@ -81,6 +85,12 @@ export function Header({
   const territoryLabel = commune
     ? `${commune.nom} · ${wilaya?.nom ?? ''}`
     : wilaya?.nom ?? null
+
+  // Notifications du citoyen (realtime sur ses propres signalements).
+  const { notifications, unread, markAllRead } = useCitizenNotifications({
+    enabled: profile?.role === 'citoyen',
+    userId: profile?.id ?? null,
+  })
 
   return (
     <header
@@ -139,17 +149,25 @@ export function Header({
           </div>
         )}
 
-        {/* Notifications (icône + point d'alerte) */}
-        <Button
-          variant="ghost"
-          size="icon"
-          data-od-id="notifications"
-          aria-label={t('notifications')}
-          className="relative shrink-0"
-        >
-          <Bell className="h-4 w-4" />
-          <span className="absolute end-1.5 top-1.5 h-2 w-2 rounded-full bg-[var(--st-no)]" />
-        </Button>
+        {/* Notifications : cloche + liste pour le citoyen (realtime), icône seule sinon */}
+        {profile?.role === 'citoyen' ? (
+          <NotificationBell
+            notifications={notifications}
+            unread={unread}
+            markAllRead={markAllRead}
+          />
+        ) : (
+          <Button
+            variant="ghost"
+            size="icon"
+            data-od-id="notifications"
+            aria-label={t('notifications')}
+            className="relative shrink-0"
+          >
+            <Bell className="h-4 w-4" />
+            <span className="absolute end-1.5 top-1.5 h-2 w-2 rounded-full bg-[var(--st-no)]" />
+          </Button>
+        )}
 
         {/* Theme toggle */}
         <ThemeToggle />

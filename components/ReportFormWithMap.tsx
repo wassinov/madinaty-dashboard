@@ -15,6 +15,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { MAP_STYLE_URL, SIGNALEMENT_TYPES, TYPE_META } from "@/lib/constants";
+import { TypeGlyph, TYPE_GLYPH } from "@/components/shared/TypeGlyph";
 import { createClient } from "@/lib/supabase/client";
 import { getNearestCommune } from "@/lib/utils/geoHelpers";
 import { toast } from "sonner";
@@ -140,7 +141,11 @@ export function ReportFormWithMap() {
                                                     backgroundColor: meta?.color,
                                                 }}
                                             />
-                                            <span>{meta?.emoji}</span>
+                                            <TypeGlyph
+                                                id={TYPE_GLYPH[value]}
+                                                className="h-4 w-4"
+                                                style={{ color: meta?.color }}
+                                            />
                                             {tTypes(value)}
                                         </span>
                                     </SelectItem>
@@ -225,8 +230,11 @@ export function ReportFormWithMap() {
                             longitude={markerCoords.longitude}
                             anchor="bottom"
                         >
-                            <div className="w-6 h-6 bg-[var(--st-no)] rounded-full border-2 border-[var(--color-border)] shadow-lg flex items-center justify-center text-[var(--color-primary-foreground)] text-xs font-bold">
-                                📍
+                            <div className="w-6 h-6 bg-[var(--st-no)] rounded-full border-2 border-[var(--color-border)] shadow-lg flex items-center justify-center text-[var(--color-primary-foreground)]">
+                                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
                             </div>
                         </Marker>
                     )}

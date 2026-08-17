@@ -56,7 +56,7 @@ const STATUT_BADGE: Record<string, string> = {
 // Couleur hex des points de la timeline d'audit (identiques clair/sombre).
 const STATUT_DOT: Record<string, string> = {
   en_attente: '#f59e0b',
-  en_cours: '#00a3c4',
+  en_cours: '#004aad',
   resolu: '#10b981',
   rejete: '#64748b',
 }

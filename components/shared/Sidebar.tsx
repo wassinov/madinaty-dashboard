@@ -96,7 +96,7 @@ export function Sidebar({
       const supabase = createClient()
       await supabase.auth.signOut()
       toast.info(tHeader('logout_success'))
-      router.push(`/${locale}/login`)
+      router.push(`/${locale}`)
     })()
   }
 
@@ -311,10 +311,10 @@ function NavItem({
         title={collapsed ? item.name : undefined}
         data-od-id={item.odId}
         className={cn(
-          'flex items-center rounded-md transition-colors',
+          'flex items-center rounded-md border-s-[3px] border-s-transparent transition-colors',
           collapsed ? 'justify-center px-0 py-2.5' : 'gap-3 px-3 py-2',
           active
-            ? 'bg-[var(--color-accent)]/10 font-medium text-[var(--color-accent)]'
+            ? 'border-s-[var(--color-accent)] bg-[var(--color-accent)]/10 font-medium text-[var(--color-accent)]'
             : 'text-[var(--color-fg)] hover:bg-[var(--color-surface-2)] hover:text-[var(--color-accent-strong)]'
         )}
       >
