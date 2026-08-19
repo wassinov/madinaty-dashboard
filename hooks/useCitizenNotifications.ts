@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 export type CitizenNotification = {
@@ -10,6 +10,7 @@ export type CitizenNotification = {
   ancienStatut: string
   description: string
   createdAt: string
+  read: boolean
 }
 
 type Props = {
@@ -18,13 +19,20 @@ type Props = {
   userId: string | null
 }
 
+/** Nombre max de notifications conservées côté client (et affichées). */
+const MAX_NOTIFICATIONS = 20
+
 /**
  * Notifications web du citoyen — équivalent web du badge « Mis à jour » mobile.
  *
- * Abonnement Realtime aux UPDATE de la table `signalements` filtrés sur le
- * signalement du citoyen (RLS : le citoyen ne reçoit que ses propres lignes).
- * Une notification n'est émise que lorsqu'il y a un changement de statut réel
- * (en_attente → en_cours → resolu / rejete). Aucune table SQL supplémentaire.
+ * Alimenté par la table `notifications` (script SQL 26) : un trigger écrit
+ * une ligne à chaque changement de statut d'un signalement appartenant au
+ * citoyen. Le hook combine :
+ *   1. Un fetch initial (persistance : les changements survenus pendant
+ *      l'absence du citoyen apparaissent à la prochaine ouverture).
+ *   2. Un abonnement Realtime aux INSERT sur `notifications` (direct).
+ * La marque « non lu » est persistée via la colonne `lue` (grant UPDATE
+ * restreint à cette colonne côté SQL).
  */
 export function useCitizenNotifications({ enabled, userId }: Props) {
   const [notifications, setNotifications] = useState<CitizenNotification[]>([])
@@ -34,48 +42,93 @@ export function useCitizenNotifications({ enabled, userId }: Props) {
     if (!enabled || !userId) return
 
     const supabase = createClient()
+    let active = true
+
+    // 1. Fetch initial : les notifications persistées (y compris celles
+    //    reçues pendant une déconnexion) sont rechargées au montage.
+    void (async () => {
+      const { data } = await supabase
+        .from('notifications')
+        .select(
+          'id, signalement_id, statut, ancien_statut, description, lue, created_at'
+        )
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(MAX_NOTIFICATIONS)
+      if (!active || !data) return
+
+      const items: CitizenNotification[] = data.map((row) => ({
+        id: row.id as string,
+        signalementId: row.signalement_id as string,
+        statut: row.statut as string,
+        ancienStatut: row.ancien_statut as string,
+        description: (row.description as string | null) ?? '',
+        createdAt: row.created_at as string,
+        read: (row.lue as boolean) ?? false,
+      }))
+      setNotifications(items)
+      setUnread(items.filter((n) => !n.read).length)
+    })()
+
+    // 2. Direct : les nouvelles lignes insérées par le trigger arrivent en
+    //    temps réel (la RLS SELECT sur `notifications` ne livre au citoyen
+    //    que ses propres lignes).
     const channel = supabase
       .channel('citizen-notifications-live')
       .on(
         'postgres_changes',
         {
-          event: 'UPDATE',
+          event: 'INSERT',
           schema: 'public',
-          table: 'signalements',
+          table: 'notifications',
           filter: `user_id=eq.${userId}`,
         },
         (payload) => {
-          const oldRow = payload.old as Record<string, unknown> | undefined
-          const newRow = payload.new as Record<string, unknown> | undefined
-          const oldStatut = oldRow?.statut
-          const newStatut = newRow?.statut
-          if (!oldStatut || !newStatut || oldStatut === newStatut) return
+          const row = payload.new as Record<string, unknown>
+          const id = row['id'] as string | undefined
+          if (!id) return
 
-          const createdAt = new Date().toISOString()
-          setNotifications((prev) =>
-            [
-              {
-                id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-                signalementId: (newRow?.['id'] as string) ?? '',
-                statut: newStatut as string,
-                ancienStatut: oldStatut as string,
-                description: (newRow?.['description'] as string) ?? '',
-                createdAt,
-              },
-              ...prev,
-            ].slice(0, 20)
-          )
-          setUnread((u) => u + 1)
+          const item: CitizenNotification = {
+            id,
+            signalementId: (row['signalement_id'] as string) ?? '',
+            statut: (row['statut'] as string) ?? '',
+            ancienStatut: (row['ancien_statut'] as string) ?? '',
+            description: (row['description'] as string) ?? '',
+            createdAt: (row['created_at'] as string) ?? new Date().toISOString(),
+            read: (row['lue'] as boolean) ?? false,
+          }
+
+          setNotifications((prev) => {
+            if (prev.some((n) => n.id === id)) return prev
+            return [item, ...prev].slice(0, MAX_NOTIFICATIONS)
+          })
+          if (!item.read) setUnread((u) => u + 1)
         }
       )
       .subscribe()
 
     return () => {
+      active = false
       void supabase.removeChannel(channel)
     }
   }, [enabled, userId])
 
-  const markAllRead = () => setUnread(0)
+  // Marque tout comme lu localement ET en base (persistance du badge).
+  const markAllRead = useCallback(() => {
+    const supabase = createClient()
+    setNotifications((prev) => {
+      const unreadIds = prev.filter((n) => !n.read).map((n) => n.id)
+      if (unreadIds.length > 0 && userId) {
+        void supabase
+          .from('notifications')
+          .update({ lue: true })
+          .eq('user_id', userId)
+          .in('id', unreadIds)
+      }
+      return prev.map((n) => ({ ...n, read: true }))
+    })
+    setUnread(0)
+  }, [userId])
 
   return { notifications, unread, markAllRead }
 }
